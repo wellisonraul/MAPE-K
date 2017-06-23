@@ -1,0 +1,21 @@
+package br.uern.wellisonraul.metodos.mapek
+
+import br.uern.wellisonraul.drools.Codigo;
+import function br.uern.wellisonraul.metodos.mapek.Executor.AcrescentaLinhas;
+import function br.uern.wellisonraul.metodos.mapek.Executor.limpaLinhas;
+
+dialect "java"
+rule "Acrescenta linhas"
+    when
+        c : Codigo( codigo == Codigo.ACRESCENTA)
+    then
+    	AcrescentaLinhas(c.ACRESCENTA);
+    	
+end
+
+rule "Limpa Arquivo"
+    when
+        c : Codigo( codigo == Codigo.LIMPA)
+    then
+    	limpaLinhas(c.LIMPA);
+end
