@@ -3,6 +3,9 @@ package br.uern.wellisonraul.metodos.auxiliares;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Random;
+
+import javax.swing.plaf.FileChooserUI;
 
 public class Escritora {
 	// ESTA PARTE DO CÓDIGO É RESPOSÁVEL POR CRIAR O ARQUIVO DE TEXTO.
@@ -22,13 +25,15 @@ public class Escritora {
 				escreveArquivo = new FileWriter(arquivoDeTexto,true);
 				escreveOTexto = new BufferedWriter(escreveArquivo);
 				// INSIRO XXXXXX
-				escreveOTexto.write("XXxxXXxxXXxxXX");
+				Random random = new Random();
+				int numero = random.nextInt(5) + 1;
+				
+				for(int i=0;i<numero;i++){
+					int letra = random.nextInt(5);
+					escreveOTexto.write(letra+" ");		
+				}
 				escreveOTexto.newLine();
-				escreveOTexto.write("XXxxXXxxXXxxXX");
-				escreveOTexto.newLine();
-				escreveOTexto.write("XXxxXXxxXXxxXX");
-				// PULO UMA LINHA
-				escreveOTexto.newLine();
+				
 				// FECHO OS MEUS ESCRITORES
 				escreveOTexto.close();
 				escreveArquivo.close();
@@ -36,6 +41,10 @@ public class Escritora {
 				System.out.println(e.getCause());
 			}
 			
+		}else if(codigo==2){
+			File arquivoTextoCopia = new File("/home/wellisonraul/MAPE-Kcopia.txt");
+			
+			arquivoTextoCopia.delete();
 		}
 	}
 	
