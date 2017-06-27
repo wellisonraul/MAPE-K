@@ -1,15 +1,15 @@
 package br.uern.wellisonraul.metodos.mapek
 
 import br.uern.wellisonraul.drools.Codigo;
-import function br.uern.wellisonraul.metodos.mapek.Executor.AcrescentaLinhas;
+import function br.uern.wellisonraul.metodos.mapek.Executor.resetaPadrao;
 import function br.uern.wellisonraul.metodos.mapek.Executor.limpaLinhas;
 
 dialect "java"
-rule "Acrescenta linhas"
+rule "Reseta Padrao"
     when
-        c : Codigo( codigo == Codigo.ACRESCENTA)
+        c : Codigo( codigo == Codigo.RESETA)
     then
-    	AcrescentaLinhas(c.ACRESCENTA);
+    	resetaPadrao(c.RESETA);
     	
 end
 

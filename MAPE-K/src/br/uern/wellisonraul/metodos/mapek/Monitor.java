@@ -6,20 +6,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import br.uern.wellisonraul.metodos.auxiliares.Escritora;
+import br.uern.wellisonraul.utilitario.CaminhosUtilitarios;
 
 public class Monitor {
 	
 	public File retornaArquivo(){
-		File arquivoXES = new File ("/home/wellisonraul/ArquivosXes.xes");
+		// CRIA UM NOVO ARQUIVO .XES
+		File arquivoXES = new File (CaminhosUtilitarios.ARQUIVO_XES);
 		
 		// TRANSFORMANDO ARQUIVO .XES CABEÇALHO
 		try {
+			// TRANSFORMAÇÃO DE CABEÇALHO
 			cabecalho(arquivoXES);
+			// TRANSFORMAÇÃO TRACES E EVENTOS
 			preencheTrace(arquivoXES);
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -28,9 +30,8 @@ public class Monitor {
 	}
 	
 	public File cabecalho(File arquivoXES) throws IOException{
-		FileWriter escritorArquivo = null;
-		escritorArquivo = new FileWriter(arquivoXES);
-
+		FileWriter escritorArquivo = new FileWriter(arquivoXES);
+		
 		BufferedWriter buferizadorArquivos = new BufferedWriter(escritorArquivo);
 		
 		// ESCREVENDO O CABEÇALHO NO ARQUIVO
@@ -69,37 +70,54 @@ public class Monitor {
 	}
 	
 	public File preencheTrace(File arquivoXES){
+		
 		// TRATANDO O DEADLOCK DAS THREADS.
+		// PREENCHE TRACE ACESSA UM MÉTODO SYNCRONIZED 
 		Escritora escritora = new Escritora();
 		escritora.escreverNoArquivo(2);
 		
-		System.out.println("aqui ?");
 		// ABRINDO O ARQUIVO CÓPIA
-		File arquivoTextoCopia = new File("/home/wellisonraul/MAPE-Kcopia");
+		File arquivoTextoCopia = new File(CaminhosUtilitarios.MAPEK_TXT_COPIA);
 		
 		// TRY - CATCH PARA INSERIR TRACES
 		try {
+			// LEITURA DO ARQUIVO ARQUIVO COPIA
 			FileReader arq = new FileReader(arquivoTextoCopia);
 		    BufferedReader lerArq = new BufferedReader(arq);
 		    String linha = lerArq.readLine();
 		    
-		    ArrayList<Integer> eventos = new ArrayList<Integer>();
-		      
+		    // ESCRITURA DE ARQUIVO PARA .ARQUIVOXES
+		    FileWriter escritorArquivo = new FileWriter(arquivoXES,true);
+		    BufferedWriter carregadorArquivo = new BufferedWriter(escritorArquivo);
+		    
+		    // DIFERENCIAR OS TRACES
+		    double caso = 0;
 		    // CRIANDO TRACES
 		    while (linha != null) {
+		    	// ESCREVENDO NO ARQUIVO.
+		    	// ABRI A EXECUÇÃO
+		    	carregadorArquivo.write("\t<trace>\n");
+    			carregadorArquivo.write("\t\t<string key=\"concept:name\" value=\"Caso"+(++caso)+"\"/>\n");
+    			
+    			// LINHA A LINHA E NA PRIMEIRA EXECUÇÃO ISSO É A LINHA UM
 		    	for (int i = 0; i < linha.length(); i++) {
+		    		// SE ELE NÃO O ESPAÇO EM BRANCO
 		    		if(!(linha.charAt(i)==32)){
-		    			int conversor = linha.charAt(i);
-		    			eventos.add(conversor);
+		    			carregadorArquivo.write("\t\t<event>\n");
+		    			carregadorArquivo.write("\t\t\t<string key=\"org:resource\" value=\"UNDEFINED\"/>\n");
+		    			carregadorArquivo.write("\t\t\t<date key=\"time:timestamp\" value=\"2008-12-09T08:20:01.527+01:00\"/>\n");
+		    			carregadorArquivo.write("\t\t\t<string key=\"concept:name\" value=\""+linha.charAt(i)+"\"/>\n");
+		    			carregadorArquivo.write("\t\t\t<string key=\"lifecycle:transition\" value=\"complete\"/>\n");
+		    			carregadorArquivo.write("\t\t</event>\n");
 		    		}
 				}
-		    	
-		    	for (Integer inteiro : eventos) {
-					System.out.println("Valores inteiros"+inteiro);
-				}
+		    	carregadorArquivo.write("\t</trace>\n\n");
 		    	
 		    	linha = lerArq.readLine(); // lê da segunda até a última linha
 		    }
+		    carregadorArquivo.write("</log>\n");
+		    carregadorArquivo.close();
+	    	escritorArquivo.close();
 		    arq.close();
 		}catch (IOException e) {
 		    System.err.printf("Erro na abertura do arquivo: %s.\n",e.getMessage());

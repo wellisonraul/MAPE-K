@@ -15,7 +15,7 @@ public class Executor {
 		//System.out.println("APAGA LINHAS");
 	}
 	
-	public void AcrescentaLinhas(int codigo){
+	public void resetaPadrao(int codigo){
 		escritora.escreverNoArquivo(codigo);
 		//System.out.println("ACRESCENTA LINHAS");
 	}

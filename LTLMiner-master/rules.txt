@@ -1,0 +1,4 @@
+1.0	<>( (activity==A /\ eventtype==complete) )
+0.6666666666666666	<>( (activity==B /\ eventtype==complete) )
+0.6666666666666666	<>( (activity==C /\ eventtype==complete) )
+1.0	<>( (activity==D /\ eventtype==complete) )

@@ -5,6 +5,7 @@ import java.io.File;
 import br.uern.wellisonraul.metodos.mapek.Analisador;
 import br.uern.wellisonraul.metodos.mapek.Monitor;
 import br.uern.wellisonraul.metodos.mapek.Planejamento;
+import br.uern.wellisonraul.utilitario.CaminhosUtilitarios;
 
 public class MAPEKThread extends Thread{
 	
@@ -17,10 +18,11 @@ public class MAPEKThread extends Thread{
 		Planejamento planejamento = new Planejamento();
 		while(true){
 			try{
-				Thread.sleep(2000);
+				// ENVIA AS INSTANCIAS A CADA X SEGUNDOS
+				Thread.sleep(CaminhosUtilitarios.TEMPO_ENTRE_ANALISES);
 				System.out.println("Quantidade de vezes que o MAPEK foi chamado:"+(++x));
-				File arquivo = monitor.retornaArquivo();
-				int codigo = analisador.retornaNumeroLinhas(arquivo);
+				File arquivoXES = monitor.retornaArquivo();
+				int codigo = analisador.consultaoLTLMinner(arquivoXES);
 				planejamento.chamaExecutor(codigo);
 			}catch(Exception e){
 				System.out.println(e);
